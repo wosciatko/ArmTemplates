@@ -7,7 +7,7 @@
         }
     },
     "variables": {
-        "baseTemplateUri": "",
+        "baseTemplateUri": "https://raw.githubusercontent.com/wosciatko/ArmTemplates/master/Kros.Esw.ResourceTemplates/Kros.Esw.ResourceTemplates/",
         "serviceApiUri": "[concat(variables('baseTemplateUri'), 'ServiceApi.json')]",
         "servicePlanUri": "[concat(variables('baseTemplateUri'), 'ServicePlan.json')]",
         "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]"
