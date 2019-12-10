@@ -1,0 +1,55 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+    "parameters": {
+        "stage": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "baseTemplateUri": "",
+        "serviceApiUri": "[concat(variables('baseTemplateUri'), 'ServiceApi.json')]",
+        "servicePlanUri": "[concat(variables('baseTemplateUri'), 'ServicePlan.json')]",
+        "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]"
+
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "[variables('servicePlanName')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "serviceApiUri",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "servicePlanName": "[variables('servicePlanName')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "InvoicingApi",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "ServiceApiUri",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "apiName": "invoicing",
+                    "stage": "dev",
+                    "slotName": "development",
+                    "servicePlanId": "??"
+                }
+            },
+            "dependsOn": [
+                [ "variables('servicePlanName')" ]
+            ]
+        }
+    ],
+  "outputs": {}
+}
