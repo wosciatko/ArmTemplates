@@ -43,7 +43,7 @@
                     "apiName": "invoicing",
                     "stage": "dev",
                     "slotName": "development",
-                    "servicePlanId": "??"
+                    "servicePlanId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]"
                 }
             },
             "dependsOn": [
