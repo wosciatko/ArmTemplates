@@ -21,11 +21,11 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "serviceApiUri",
+                    "uri": "[variables('servicePlanUri')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "servicePlanName": "[variables('servicePlanName')]"
+                    "servicePlanName": { "value": "[variables('servicePlanName')]" }
                 }
             }
         },
@@ -36,18 +36,18 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "ServiceApiUri",
+                    "uri": "[variables('serviceApiUri')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "apiName": "invoicing",
-                    "stage": "dev",
-                    "slotName": "development",
-                    "servicePlanId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]"
+                    "apiName": { "value": "invoicing" },
+                    "stage": { "value": "dev" },
+                    "slotName": { "value": "development" },
+                    "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" }
                 }
             },
             "dependsOn": [
-                [ "variables('servicePlanName')" ]
+                "[variables('servicePlanName')]"
             ]
         }
     ],
