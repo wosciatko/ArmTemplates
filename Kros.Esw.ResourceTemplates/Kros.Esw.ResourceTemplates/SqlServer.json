@@ -16,9 +16,9 @@
     "resources": [
         {
             "type": "Microsoft.Sql/servers",
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2015-05-01-preview",
             "name": "[parameters('serverName')]",
-            "location": "westeurope",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "Shared": ""
             },
@@ -31,7 +31,7 @@
         },
         {
             "type": "Microsoft.Sql/servers/firewallRules",
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2015-05-01-preview",
             "name": "[concat(parameters('serverName'), '/AllowAllWindowsAzureIps')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', parameters('serverName'))]"
@@ -43,7 +43,7 @@
         },
         {
             "type": "Microsoft.Sql/servers/keys",
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2015-05-01-preview",
             "name": "[concat(parameters('serverName'), '/ServiceManaged')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', parameters('serverName'))]"

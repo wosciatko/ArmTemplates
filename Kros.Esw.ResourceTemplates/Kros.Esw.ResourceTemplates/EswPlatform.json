@@ -70,7 +70,8 @@
                     "serverName": { "value": "[variables('sqlServerName')]" },
                     "administratorLogin": { "value": "[variables('sqlServerAdminUserName')]" },
                     "administratorLoginPassword": { "value": "[variables('sqlServerAdminPassword')]" }
-                },
+                }
+            },
             "dependsOn": [
                 "[variables('servicePlanName')]"
             ]
