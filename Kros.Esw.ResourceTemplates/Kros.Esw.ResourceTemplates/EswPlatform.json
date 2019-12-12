@@ -15,6 +15,25 @@
 
         "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]",
         "sqlServerName": "[concat('esw-', parameters('stage'), '-sql')]",
+        "servicesToCreate": [
+            "authorization",
+            "companies",
+            "defaults",
+            "gateway",
+            "invoicing",
+            "partners",
+            "recalculate",
+            "reporting",
+            "search"
+        ],
+        "databasesToCreate": [
+            "authorization",
+            "companies",
+            "invoicing",
+            "partners"
+        ],
+
+        "apiSlotName": "development",
         "sqlServerAdminUserName": "krosdbadmin",
         "sqlServerAdminPassword": "ZQpdeE_vY_gZsZ=c5Hr$4F@gcv"
 
@@ -39,7 +58,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
-            "name": "InvoicingApi",
+            "name": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -47,11 +66,15 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "apiName": { "value": "invoicing" },
+                    "apiName": { "value": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]" },
                     "stage": { "value": "[parameters('stage')]" },
-                    "slotName": { "value": "development" },
+                    "slotName": { "value": "[variables('apiSlotName')]" },
                     "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" }
                 }
+            },
+            "copy": {
+                "name": "serviceApiCopy",
+                "count": "[length(variables('servicesToCreate'))]"
             },
             "dependsOn": [
                 "[variables('servicePlanName')]"
@@ -77,7 +100,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
-            "name": "esw-invoicing-db",
+            "name": "[concat('esw-', parameters('stage'), '-', variables('databasesToCreate')[copyIndex()], '-db')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -86,8 +109,12 @@
                 },
                 "parameters": {
                     "sqlServerName": { "value": "[variables('sqlServerName')]" },
-                    "databaseName": { "value": "esw-invoicing-db" }
+                    "databaseName": { "value": "[concat('esw-', parameters('stage'), '-', variables('databasesToCreate')[copyIndex()], '-db')]" }
                 }
+            },
+            "copy": {
+                "name": "databasesCopy",
+                "count": "[length(variables('databasesToCreate'))]"
             }
         }
     ],
