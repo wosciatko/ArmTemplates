@@ -31,6 +31,7 @@
     </None>
     <Content Include="Deploy-AzureResourceGroup.ps1" />
     <None Include="ServiceApi.json" />
+    <None Include="SqlDatabase.json" />
     <None Include="SqlServer.json" />
   </ItemGroup>
   <Target Name="GetReferenceAssemblyPaths" />
