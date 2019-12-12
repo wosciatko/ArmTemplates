@@ -40,18 +40,6 @@
                 "startIpAddress": "0.0.0.0",
                 "endIpAddress": "0.0.0.0"
             }
-        },
-        {
-            "type": "Microsoft.Sql/servers/keys",
-            "apiVersion": "2015-05-01-preview",
-            "name": "[concat(parameters('serverName'), '/ServiceManaged')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', parameters('serverName'))]"
-            ],
-            "kind": "servicemanaged",
-            "properties": {
-                "serverKeyType": "ServiceManaged"
-            }
         }
     ]
 }

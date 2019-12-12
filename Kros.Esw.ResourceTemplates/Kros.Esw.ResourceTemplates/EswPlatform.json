@@ -15,7 +15,7 @@
         "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]",
         "sqlServerName": "[concat('esw-', parameters('stage'), '-sql')]",
         "sqlServerAdminUserName": "krosdbadmin",
-        "sqlServerAdminPassword": "testpassword12345"
+        "sqlServerAdminPassword": "ZQpdeE_vY_gZsZ=c5Hr$4F@gcv"
 
 
     },
