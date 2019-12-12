@@ -10,13 +10,19 @@
         "baseTemplateUri": "https://raw.githubusercontent.com/wosciatko/ArmTemplates/master/Kros.Esw.ResourceTemplates/Kros.Esw.ResourceTemplates/",
         "serviceApiUri": "[concat(variables('baseTemplateUri'), 'ServiceApi.json')]",
         "servicePlanUri": "[concat(variables('baseTemplateUri'), 'ServicePlan.json')]",
-        "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]"
+        "sqlServerUri": "[concat(variables('baseTemplateUri'), 'SqlServer.json')]",
+
+        "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]",
+        "sqlServerName": "[concat('esw-', parameters('stage'), '-sql')]",
+        "sqlServerAdminUserName": "krosdbadmin",
+        "sqlServerAdminPassword": "testpassword12345"
+
 
     },
     "resources": [
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-05-01",
+            "apiVersion": "2018-11-01",
             "name": "[variables('servicePlanName')]",
             "properties": {
                 "mode": "Incremental",
@@ -31,7 +37,7 @@
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-05-01",
+            "apiVersion": "2018-11-01",
             "name": "InvoicingApi",
             "properties": {
                 "mode": "Incremental",
@@ -41,11 +47,30 @@
                 },
                 "parameters": {
                     "apiName": { "value": "invoicing" },
-                    "stage": { "value": "dev" },
+                    "stage": { "value": "[parameters('stage')]" },
                     "slotName": { "value": "development" },
                     "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" }
                 }
             },
+            "dependsOn": [
+                "[variables('servicePlanName')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[variables('sqlServerName')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('sqlServerUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "serverName": { "value": "[variables('sqlServerName')]" },
+                    "administratorLogin": { "value": "[variables('sqlServerAdminUserName')]" },
+                    "administratorLoginPassword": { "value": "[variables('sqlServerAdminPassword')]" }
+                },
             "dependsOn": [
                 "[variables('servicePlanName')]"
             ]
