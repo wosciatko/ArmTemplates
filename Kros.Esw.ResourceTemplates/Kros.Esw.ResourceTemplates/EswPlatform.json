@@ -115,7 +115,10 @@
             "copy": {
                 "name": "databasesCopy",
                 "count": "[length(variables('databasesToCreate'))]"
-            }
+            },
+            "dependsOn": [
+                "[variables('sqlServerName')]"
+            ]
         }
     ],
   "outputs": {}
