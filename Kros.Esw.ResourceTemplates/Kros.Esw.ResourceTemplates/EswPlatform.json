@@ -1,6 +1,6 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
     "parameters": {
         "stage": {
             "type": "string"
@@ -15,6 +15,8 @@
         "azureSearchUri": "[concat(variables('baseTemplateUri'), 'AzureSearch.json')]",
         "storageAccountUri": "[concat(variables('baseTemplateUri'), 'StorageAccount.json')]",
         "serviceBusUri": "[concat(variables('baseTemplateUri'), 'ServiceBus.json')]",
+        "funcServicePlanUri": "[concat(variables('baseTemplateUri'), 'FuncServicePlan.json') ]",
+        "functionAppUri": "[concat(variables('baseTemplateUri'), 'FunctionApp.json') ]",
 
 
         "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]",
@@ -22,6 +24,8 @@
         "azureSearchName": "[concat('esw-', parameters('stage'), '-search')]",
         "storageAccountName": "[concat('esw', parameters('stage'), 'storage')]",
         "azureServiceBusName": "[concat('esw-', parameters('stage'), '-platform-asb')]",
+        "funcServicePlanName": "[concat('esw-', parameters('stage'), '-fsp')]",
+
 
 
         "servicesToCreate": [
@@ -40,6 +44,12 @@
             "companies",
             "invoicing",
             "partners"
+        ],
+
+        "functionAppToCreate": [
+            "companies-search",
+            "search",
+            "sync"
         ],
 
         "apiSlotName": "development",
@@ -78,7 +88,7 @@
                     "apiName": { "value": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]" },
                     "stage": { "value": "[parameters('stage')]" },
                     "slotName": { "value": "[variables('apiSlotName')]" },
-                    "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" }
+                    "servicePlanName": { "value": "[variables('servicePlanName')]" }
                 }
             },
             "copy": {
@@ -173,6 +183,46 @@
                 "parameters": {
                     "serviceBusName": { "value": "[variables('azureServiceBusName')]" }
                 }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[variables('funcServicePlanName')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('funcServicePlanUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "servicePlanName": { "value": "[variables('funcServicePlanName')]" }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('functionAppUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "functionAppName": { "value": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]" },
+                    "servicePlanName": { "value": "[variables('funcServicePlanName')]" },
+                    "storageAccountName": { "value": "[variables('storageAccountName')]" }
+                }
+            },
+            "dependsOn": [
+                "[variables('funcServicePlanName')]",
+                "[variables('storageAccountName')]"
+            ],
+            "copy": {
+                "name": "functionAppCopy",
+                "count": "[length(variables('functionAppToCreate'))]"
             }
         }
     ],

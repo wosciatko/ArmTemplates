@@ -15,8 +15,8 @@
         "azureSearchUri": "[concat(variables('baseTemplateUri'), 'AzureSearch.json')]",
         "storageAccountUri": "[concat(variables('baseTemplateUri'), 'StorageAccount.json')]",
         "serviceBusUri": "[concat(variables('baseTemplateUri'), 'ServiceBus.json')]",
-
-
+        "funcServicePlanUri": "[concat(variables('baseTemplateUri'), 'FuncServicePlan.json') ]",
+        "functionAppUri": "[concat(variables('baseTemplateUri'), 'FunctionApp.json') ]",
 
 
         "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]",
@@ -24,6 +24,7 @@
         "azureSearchName": "[concat('esw-', parameters('stage'), '-search')]",
         "storageAccountName": "[concat('esw', parameters('stage'), 'storage')]",
         "azureServiceBusName": "[concat('esw-', parameters('stage'), '-platform-asb')]",
+        "funcServicePlanName": "[concat('esw-', parameters('stage'), '-fsp')]",
 
 
 
@@ -45,6 +46,12 @@
             "partners"
         ],
 
+        "functionAppToCreate": [
+            "companies-search",
+            "search",
+            "sync"
+        ],
+
         "apiSlotName": "development",
         "sqlServerAdminUserName": "krosdbadmin",
         "sqlServerAdminPassword": "ZQpdeE_vY_gZsZ=c5Hr$4F@gcv"
@@ -55,16 +62,56 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[variables('azureServiceBusName')]",
+            "name": "[variables('storageAccountName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('serviceBusUri')]",
+                    "uri": "[variables('storageAccountUri')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "serviceBusName": { "value": "[variables('azureServiceBusName')]" }
+                    "storageAccountName": { "value": "[variables('storageAccountName')]" }
                 }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[variables('funcServicePlanName')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('funcServicePlanUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "servicePlanName": { "value": "[variables('funcServicePlanName')]" }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('functionAppUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "functionAppName": { "value": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]" },
+                    "servicePlanName": { "value": "[variables('funcServicePlanName')]" },
+                    "storageAccountName": { "value": "[variables('storageAccountName')]" }
+                }
+            },
+            "dependsOn": [
+                "[variables('funcServicePlanName')]",
+                "[variables('storageAccountName')]"
+            ],
+            "copy": {
+                "name": "functionAppCopy",
+                "count": "[length(variables('functionAppToCreate'))]"
             }
         }
     ],
