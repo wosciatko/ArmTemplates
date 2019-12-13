@@ -90,7 +90,7 @@
                 }
             },
             "dependsOn": [
-                "[variables('storageAccountName')]"
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ],
             "copy": {
                 "name": "functionAppCopy",
