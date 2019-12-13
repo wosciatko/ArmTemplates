@@ -89,13 +89,13 @@
                     "storageName": { "value": "[variables('storageAccountName')]" }
                 }
             },
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-            ],
             "copy": {
                 "name": "functionAppCopy",
                 "count": "[length(variables('functionAppToCreate'))]"
-            }
+            },
+            "dependsOn": [
+                "[variables('storageAccountName')]"
+            ]
         }
     ],
     "outputs": {}
