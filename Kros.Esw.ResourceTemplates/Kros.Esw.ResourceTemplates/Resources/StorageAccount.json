@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "storageAccountName": {
+        "storageName": {
             "type": "string"
         },
         "storageAccountType": {
@@ -21,7 +21,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-04-01",
-            "name": "[parameters('storageAccountName')]",
+            "name": "[parameters('storageName')]",
             "location": "[resourceGroup().location]",
             "tags": {
                 "Shared": ""

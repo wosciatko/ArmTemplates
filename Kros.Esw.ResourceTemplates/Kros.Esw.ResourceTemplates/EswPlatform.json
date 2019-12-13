@@ -166,7 +166,7 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "storageAccountName": { "value": "[variables('storageAccountName')]" }
+                    "storageName": { "value": "[variables('storageAccountName')]" }
                 }
             }
         },
@@ -213,7 +213,7 @@
                 "parameters": {
                     "functionAppName": { "value": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]" },
                     "servicePlanName": { "value": "[variables('funcServicePlanName')]" },
-                    "storageAccountName": { "value": "[variables('storageAccountName')]" }
+                    "storageName": { "value": "[variables('storageAccountName')]" }
                 }
             },
             "dependsOn": [
