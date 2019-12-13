@@ -7,6 +7,9 @@
         },
         "storageName": {
             "type": "string"
+        },
+        "storageKey": {
+            "type": "string"
         }
     },
     "variables": {
@@ -23,11 +26,11 @@
                     "appSettings": [
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageName'), ';AccountKey=')]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageName'), ';AccountKey=', parameters('storageKey'))]"
                         },
                         {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageName'), ';AccountKey=')]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageName'), ';AccountKey=', parameters('storageKey'))]"
                         },
                         {
                             "name": "WEBSITE_CONTENTSHARE",

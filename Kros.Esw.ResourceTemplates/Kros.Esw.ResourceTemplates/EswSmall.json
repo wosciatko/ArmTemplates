@@ -86,7 +86,8 @@
                 },
                 "parameters": {
                     "functionAppName": { "value": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]" },
-                    "storageName": { "value": "[variables('storageAccountName')]" }
+                    "storageName": { "value": "[variables('storageAccountName')]" },
+                    "storageKey": { "value": "[listKeys(variables('storageAccountName'),'2018-11-01').key1]" }
                 }
             },
             "copy": {
