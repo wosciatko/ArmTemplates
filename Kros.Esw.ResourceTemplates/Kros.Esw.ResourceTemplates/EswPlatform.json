@@ -13,11 +13,15 @@
         "sqlServerUri": "[concat(variables('baseTemplateUri'), 'SqlServer.json')]",
         "sqlDatabaseUri": "[concat(variables('baseTemplateUri'), 'SqlDatabase.json')]",
         "azureSearchUri": "[concat(variables('baseTemplateUri'), 'AzureSearch.json')]",
+        "storageAccountUri": "[concat(variables('baseTemplateUri'), 'StorageAccount.json')]",
+
 
 
         "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]",
         "sqlServerName": "[concat('esw-', parameters('stage'), '-sql')]",
         "azureSearchName": "[concat('esw-', parameters('stage'), '-search')]",
+        "storageAccountName": "[concat('esw-', parameters('stage'), '-storage')]",
+
         "servicesToCreate": [
             "authorization",
             "companies",
@@ -43,7 +47,7 @@
 
     },
     "resources": [
-        {   // app service plan
+        {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
             "name": "[variables('servicePlanName')]",
@@ -58,7 +62,7 @@
                 }
             }
         },
-        { // app services
+        {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
             "name": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]",
@@ -83,7 +87,7 @@
                 "[variables('servicePlanName')]"
             ]
         },
-        { // SQL server
+        {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
             "name": "[variables('sqlServerName')]",
@@ -100,7 +104,7 @@
                 }
             }
         },
-        { // SQL databases
+        {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
             "name": "[concat('esw-', parameters('stage'), '-', variables('databasesToCreate')[copyIndex()], '-db')]",
@@ -122,8 +126,8 @@
             "dependsOn": [
                 "[variables('sqlServerName')]"
             ]
-        }
-        { // Azure Search
+        },
+        {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
             "name": "[variables('azureSearchName')]",
@@ -136,6 +140,21 @@
                 "parameters": {
                     "searchName": { "value": "[variables('azureSearchName')]" },
                     "tier": { "value": "basic" }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[variables('storageAccountName')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('storageAccountUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "storageAccountName": { "value": "[variables('storageAccountName')]" }
                 }
             }
         }

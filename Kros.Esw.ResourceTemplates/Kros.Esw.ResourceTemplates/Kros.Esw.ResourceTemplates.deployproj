@@ -23,6 +23,7 @@
   <Import Condition=" Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets') " Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets" />
   <!-- vertag<:>end -->
   <ItemGroup>
+    <Content Include="EswSmall.json" />
     <Content Include="EswPlatform.json" />
     <Content Include="azuredeploy.parameters.json" />
     <None Include="AzureSearch.json" />
@@ -34,6 +35,7 @@
     <None Include="ServiceApi.json" />
     <None Include="SqlDatabase.json" />
     <None Include="SqlServer.json" />
+    <None Include="StorageAccount.json" />
   </ItemGroup>
   <Target Name="GetReferenceAssemblyPaths" />
 </Project>
