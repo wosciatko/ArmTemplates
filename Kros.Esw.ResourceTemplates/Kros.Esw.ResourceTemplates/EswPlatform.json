@@ -12,9 +12,12 @@
         "servicePlanUri": "[concat(variables('baseTemplateUri'), 'ServicePlan.json')]",
         "sqlServerUri": "[concat(variables('baseTemplateUri'), 'SqlServer.json')]",
         "sqlDatabaseUri": "[concat(variables('baseTemplateUri'), 'SqlDatabase.json')]",
+        "azureSearchUri": "[concat(variables('baseTemplateUri'), 'AzureSearch.json')]",
+
 
         "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]",
         "sqlServerName": "[concat('esw-', parameters('stage'), '-sql')]",
+        "azureSearchName": "[concat('esw-', parameters('stage'), '-search')]",
         "servicesToCreate": [
             "authorization",
             "companies",
@@ -40,7 +43,7 @@
 
     },
     "resources": [
-        {
+        {   // app service plan
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
             "name": "[variables('servicePlanName')]",
@@ -55,7 +58,7 @@
                 }
             }
         },
-        {
+        { // app services
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
             "name": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]",
@@ -80,7 +83,7 @@
                 "[variables('servicePlanName')]"
             ]
         },
-        {
+        { // SQL server
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
             "name": "[variables('sqlServerName')]",
@@ -97,7 +100,7 @@
                 }
             }
         },
-        {
+        { // SQL databases
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
             "name": "[concat('esw-', parameters('stage'), '-', variables('databasesToCreate')[copyIndex()], '-db')]",
@@ -119,6 +122,22 @@
             "dependsOn": [
                 "[variables('sqlServerName')]"
             ]
+        }
+        { // Azure Search
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[variables('azureSearchName')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('azureSearchUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "searchName": { "value": "[variables('azureSearchName')]" },
+                    "tier": { "value": "basic" }
+                }
+            }
         }
     ],
   "outputs": {}
