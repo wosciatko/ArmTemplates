@@ -14,13 +14,15 @@
         "sqlDatabaseUri": "[concat(variables('baseTemplateUri'), 'SqlDatabase.json')]",
         "azureSearchUri": "[concat(variables('baseTemplateUri'), 'AzureSearch.json')]",
         "storageAccountUri": "[concat(variables('baseTemplateUri'), 'StorageAccount.json')]",
-
+        "serviceBusUri": "[concat(variables('baseTemplateUri'), 'ServiceBus.json')]",
 
 
         "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]",
         "sqlServerName": "[concat('esw-', parameters('stage'), '-sql')]",
         "azureSearchName": "[concat('esw-', parameters('stage'), '-search')]",
-        "storageAccountName": "[concat('esw-', parameters('stage'), '-storage')]",
+        "storageAccountName": "[concat('esw', parameters('stage'), 'storage')]",
+        "azureServiceBusName": "[concat('esw-', parameters('stage'), '-platform-asb')]",
+
 
         "servicesToCreate": [
             "authorization",
@@ -155,6 +157,21 @@
                 },
                 "parameters": {
                     "storageAccountName": { "value": "[variables('storageAccountName')]" }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[variables('azureServiceBusName')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('serviceBusUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "serviceBusName": { "value": "[variables('azureServiceBusName')]" }
                 }
             }
         }

@@ -27,6 +27,7 @@
     <Content Include="EswPlatform.json" />
     <Content Include="azuredeploy.parameters.json" />
     <None Include="Resources\AzureSearch.json" />
+    <None Include="Resources\ServiceBus.json" />
     <None Include="Resources\ServicePlan.json" />
     <None Include="Deployment.targets">
       <Visible>False</Visible>
