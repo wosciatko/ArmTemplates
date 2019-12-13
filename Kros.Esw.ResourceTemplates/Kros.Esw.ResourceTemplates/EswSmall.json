@@ -77,21 +77,6 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[variables('funcServicePlanName')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('funcServicePlanUri')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "servicePlanName": { "value": "[variables('funcServicePlanName')]" }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-11-01",
             "name": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]",
             "properties": {
                 "mode": "Incremental",
@@ -101,12 +86,10 @@
                 },
                 "parameters": {
                     "functionAppName": { "value": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]" },
-                    "servicePlanName": { "value": "[variables('funcServicePlanName')]" },
                     "storageName": { "value": "[variables('storageAccountName')]" }
                 }
             },
             "dependsOn": [
-                "[variables('funcServicePlanName')]",
                 "[variables('storageAccountName')]"
             ],
             "copy": {
