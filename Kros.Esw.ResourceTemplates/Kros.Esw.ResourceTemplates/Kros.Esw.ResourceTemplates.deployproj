@@ -26,16 +26,16 @@
     <Content Include="EswSmall.json" />
     <Content Include="EswPlatform.json" />
     <Content Include="azuredeploy.parameters.json" />
-    <None Include="AzureSearch.json" />
-    <None Include="ServicePlan.json" />
+    <None Include="Resources\AzureSearch.json" />
+    <None Include="Resources\ServicePlan.json" />
     <None Include="Deployment.targets">
       <Visible>False</Visible>
     </None>
     <Content Include="Deploy-AzureResourceGroup.ps1" />
-    <None Include="ServiceApi.json" />
-    <None Include="SqlDatabase.json" />
-    <None Include="SqlServer.json" />
-    <None Include="StorageAccount.json" />
+    <None Include="Resources\ServiceApi.json" />
+    <None Include="Resources\SqlDatabase.json" />
+    <None Include="Resources\SqlServer.json" />
+    <None Include="Resources\StorageAccount.json" />
   </ItemGroup>
   <Target Name="GetReferenceAssemblyPaths" />
 </Project>

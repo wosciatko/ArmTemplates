@@ -7,7 +7,7 @@
         }
     },
     "variables": {
-        "baseTemplateUri": "https://raw.githubusercontent.com/wosciatko/ArmTemplates/master/Kros.Esw.ResourceTemplates/Kros.Esw.ResourceTemplates/",
+        "baseTemplateUri": "https://raw.githubusercontent.com/wosciatko/ArmTemplates/master/Kros.Esw.ResourceTemplates/Kros.Esw.ResourceTemplates/Resources/",
         "serviceApiUri": "[concat(variables('baseTemplateUri'), 'ServiceApi.json')]",
         "servicePlanUri": "[concat(variables('baseTemplateUri'), 'ServicePlan.json')]",
         "sqlServerUri": "[concat(variables('baseTemplateUri'), 'SqlServer.json')]",
