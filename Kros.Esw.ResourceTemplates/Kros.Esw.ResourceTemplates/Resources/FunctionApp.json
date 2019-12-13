@@ -21,14 +21,7 @@
             "properties": {
                 "siteConfig": {
                     "appSettings": [
-                        {
-                            "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageName'), ';AccountKey=', listKeys(parameters('storageName'),'2015-05-01-preview').key1)]"
-                        },
-                        {
-                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageName'), ';AccountKey=', listKeys(parameters('storageName'),'2015-05-01-preview').key1)]"
-                        },
+
                         {
                             "name": "WEBSITE_CONTENTSHARE",
                             "value": "[toLower(parameters('functionAppName'))]"
