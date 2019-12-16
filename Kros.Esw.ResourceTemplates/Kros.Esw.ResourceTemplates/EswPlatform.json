@@ -86,7 +86,6 @@
                 },
                 "parameters": {
                     "apiName": { "value": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]" },
-                    "stage": { "value": "[parameters('stage')]" },
                     "slotName": { "value": "[variables('apiSlotName')]" },
                     "servicePlanName": { "value": "[variables('servicePlanName')]" }
                 }
@@ -188,21 +187,6 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[variables('funcServicePlanName')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('funcServicePlanUri')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "servicePlanName": { "value": "[variables('funcServicePlanName')]" }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2018-11-01",
             "name": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]",
             "properties": {
                 "mode": "Incremental",
@@ -212,18 +196,17 @@
                 },
                 "parameters": {
                     "functionAppName": { "value": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]" },
-                    "servicePlanName": { "value": "[variables('funcServicePlanName')]" },
-                    "storageName": { "value": "[variables('storageAccountName')]" }
+                    "storageName": { "value": "[variables('storageAccountName')]" },
+                    "storageKey": { "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')),'2019-04-01').keys[0].value]" }
                 }
             },
-            "dependsOn": [
-                "[variables('funcServicePlanName')]",
-                "[variables('storageAccountName')]"
-            ],
             "copy": {
                 "name": "functionAppCopy",
                 "count": "[length(variables('functionAppToCreate'))]"
-            }
+            },
+            "dependsOn": [
+                "[variables('storageAccountName')]"
+            ]
         }
     ],
   "outputs": {}

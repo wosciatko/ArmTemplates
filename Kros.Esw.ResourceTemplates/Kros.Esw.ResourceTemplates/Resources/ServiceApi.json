@@ -42,10 +42,10 @@
         {
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('servicePlanId'), '/web')]",
+            "name": "[concat(parameters('servicePlanName'), '/web')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('servicePlanId'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('servicePlanName'))]"
             ],
             "tags": {
                 "Esw": ""
@@ -161,15 +161,15 @@
         {
             "type": "Microsoft.Web/sites/slots",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('servicePlanId'), '/', parameters('slotName'))]",
+            "name": "[concat(parameters('servicePlanName'), '/', parameters('slotName'))]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('servicePlanId'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('servicePlanName'))]"
             ],
             "kind": "app",
             "properties": {
                 "enabled": true,
-                "serverFarmId": "[parameters('servicePlanId')]",
+                "serverFarmId": "[parameters('servicePlanName')]",
                 "reserved": false,
                 "isXenon": false,
                 "hyperV": false,
@@ -186,11 +186,11 @@
         {
             "type": "Microsoft.Web/sites/slots/config",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('servicePlanId'), '/', parameters('slotName'),'/web')]",
+            "name": "[concat(parameters('servicePlanName'), '/', parameters('slotName'),'/web')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites/slots', parameters('servicePlanId'), parameters('slotName'))]",
-                "[resourceId('Microsoft.Web/sites', parameters('servicePlanId'))]"
+                "[resourceId('Microsoft.Web/sites/slots', parameters('servicePlanName'), parameters('slotName'))]",
+                "[resourceId('Microsoft.Web/sites', parameters('servicePlanName'))]"
             ],
             "properties": {
                 "numberOfWorkers": 1,

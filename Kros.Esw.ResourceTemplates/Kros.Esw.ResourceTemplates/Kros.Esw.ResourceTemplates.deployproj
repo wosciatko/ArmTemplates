@@ -26,7 +26,6 @@
     <Content Include="EswSmall.json" />
     <Content Include="EswPlatform.json" />
     <Content Include="azuredeploy.parameters.json" />
-    <None Include="Resources\FuncServicePlan.json" />
     <None Include="Resources\FunctionApp.json" />
     <None Include="Resources\AzureSearch.json" />
     <None Include="Resources\ServiceBus.json" />
