@@ -8,7 +8,7 @@
         "slotName": {
             "type": "string"
         },
-        "servicePlanName": {
+        "servicePlanId": {
             "type": "string"
         }
     },
@@ -25,7 +25,7 @@
             "kind": "app",
             "properties": {
                 "enabled": true,
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('servicePlanName'))]",
+                "serverFarmId": "[parameters('servicePlanId')]",
                 "reserved": false,
                 "isXenon": false,
                 "hyperV": false,
@@ -42,10 +42,10 @@
         {
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('servicePlanName'), '/web')]",
+            "name": "[concat(parameters('apiName'), '/web')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('servicePlanName'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('apiName'))]"
             ],
             "tags": {
                 "Esw": ""
@@ -161,15 +161,15 @@
         {
             "type": "Microsoft.Web/sites/slots",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('servicePlanName'), '/', parameters('slotName'))]",
+            "name": "[concat(parameters('apiName'), '/', parameters('slotName'))]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('servicePlanName'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('apiName'))]"
             ],
             "kind": "app",
             "properties": {
                 "enabled": true,
-                "serverFarmId": "[parameters('servicePlanName')]",
+                "serverFarmId": "[parameters('servicePlanId')]",
                 "reserved": false,
                 "isXenon": false,
                 "hyperV": false,
@@ -186,11 +186,11 @@
         {
             "type": "Microsoft.Web/sites/slots/config",
             "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('servicePlanName'), '/', parameters('slotName'),'/web')]",
+            "name": "[concat(parameters('apiName'), '/', parameters('slotName'),'/web')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites/slots', parameters('servicePlanName'), parameters('slotName'))]",
-                "[resourceId('Microsoft.Web/sites', parameters('servicePlanName'))]"
+                "[resourceId('Microsoft.Web/sites/slots', parameters('apiName'), parameters('slotName'))]",
+                "[resourceId('Microsoft.Web/sites', parameters('apiName'))]"
             ],
             "properties": {
                 "numberOfWorkers": 1,

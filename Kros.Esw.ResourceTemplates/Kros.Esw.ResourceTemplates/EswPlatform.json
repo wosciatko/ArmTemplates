@@ -87,7 +87,7 @@
                 "parameters": {
                     "apiName": { "value": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]" },
                     "slotName": { "value": "[variables('apiSlotName')]" },
-                    "servicePlanName": { "value": "[variables('servicePlanName')]" }
+                    "servicePlanName": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" }
                 }
             },
             "copy": {
