@@ -24,7 +24,10 @@
             "properties": {
                 "siteConfig": {
                     "appSettings": [
-
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageName'), ';AccountKey=', parameters('storageKey'))]"
+                        },
                         {
                             "name": "WEBSITE_CONTENTSHARE",
                             "value": "[toLower(parameters('functionAppName'))]"
