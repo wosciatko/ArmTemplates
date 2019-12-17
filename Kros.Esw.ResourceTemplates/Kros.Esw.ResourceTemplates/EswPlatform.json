@@ -58,14 +58,12 @@
         "cdnEndpoints": [
             {
                 "name": "[concat('esw-', parameters('stage'), '-invocing-cdn')]",
-                "originHost": "[replace(replace(reference(variables('storageAccountName')).primaryEndpoints.blob,'https://',''),'/','')]",
                 "originPath": "/invocing/test",
                 "domainName": "esw-kros-wtf",
                 "domainHost": "esw.kros.wtf"
             },
             {
                 "name": "[concat('esw-', parameters('stage'), '-invocing-development-cdn')]",
-                "originHost": "[replace(replace(reference(variables('storageAccountName')).primaryEndpoints.blob,'https://',''),'/','')]",
                 "originPath": "/invocing/dev",
                 "domainName": "dev-esw-kros-wtf",
                 "domainHost": "dev.esw.kros.wtf"
@@ -241,7 +239,9 @@
                 "parameters": {
                     "cdnProfileName": { "value": "[variables('cdnProfileName')]" },
                     "stage": { "value": "[parameters('stage')]" },
-                    "endpoints": { "value": "" }
+                    "endpoints": { "value": "[variables('cdnEndpoints')]" },
+                    "storageUri": { "value": "[replace(replace(reference(variables('storageAccountName')).primaryEndpoints.blob,'https://',''),'/','')]" }
+
                 }
             },
             "copy": {
