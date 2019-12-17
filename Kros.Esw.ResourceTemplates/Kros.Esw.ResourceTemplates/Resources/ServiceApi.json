@@ -161,6 +161,7 @@
         {
             "type": "Microsoft.Web/sites/slots",
             "apiVersion": "2018-11-01",
+            "condition": "[not(empty(parameters('slotName')))]",
             "name": "[concat(parameters('apiName'), '/', parameters('slotName'))]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
