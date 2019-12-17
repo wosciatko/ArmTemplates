@@ -4,6 +4,9 @@
     "parameters": {
         "stage": {
             "type": "string"
+        },
+        "slot": {
+            "type": "string"
         }
     },
     "variables": {
@@ -70,7 +73,7 @@
             }
         ],
 
-        "apiSlotName": "development",
+        "apiSlotName": "[parameters('slot')]",
         "sqlServerAdminUserName": "krosdbadmin",
         "sqlServerAdminPassword": "ZQpdeE_vY_gZsZ=c5Hr$4F@gcv"
 
@@ -95,25 +98,31 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[variables('cdnProfileName')]",
+            "name": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('cdnUri')]",
+                    "uri": "[variables('functionAppUri')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "cdnProfileName": { "value": "[variables('cdnProfileName')]" },
-                    "stage": { "value": "[parameters('stage')]" },
-                    "endpoints": { "value": "[variables('cdnEndpoints')]" },
-                    "storageUri": { "value": "[replace(replace(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), '2019-04-01').primaryEndpoints.web,'https://',''),'/','')]" }
-
+                    "functionAppName": { "value": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]" },
+                    "storageName": { "value": "[variables('storageAccountName')]" },
+                    "storageKey": { "value": "[reference(variables('storageAccountName')).outputs.storageKey.value]" }
                 }
+            },
+            "copy": {
+                "name": "functionAppCopy",
+                "count": "[length(variables('functionAppToCreate'))]"
             },
             "dependsOn": [
                 "[variables('storageAccountName')]"
             ]
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "keyyy": {
+            "value": "[reference(variables('storageAccountName')).outputs.storageKey.value]"
+        }
+    }
 }
