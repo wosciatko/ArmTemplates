@@ -17,6 +17,8 @@
         "serviceBusUri": "[concat(variables('baseTemplateUri'), 'ServiceBus.json')]",
         "funcServicePlanUri": "[concat(variables('baseTemplateUri'), 'FuncServicePlan.json') ]",
         "functionAppUri": "[concat(variables('baseTemplateUri'), 'FunctionApp.json') ]",
+        "cdnUri": "[concat(variables('baseTemplateUri'), 'Cdn.json') ]",
+
 
 
         "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]",
@@ -24,7 +26,8 @@
         "azureSearchName": "[concat('esw-', parameters('stage'), '-search')]",
         "storageAccountName": "[concat('esw', parameters('stage'), 'storage')]",
         "azureServiceBusName": "[concat('esw-', parameters('stage'), '-platform-asb')]",
-        "funcServicePlanName": "[concat('esw-', parameters('stage'), '-fsp')]",
+        "cdnProfileName": "[concat('esw-', parameters('stage'), '-cdnprofile')]",
+
 
 
 
@@ -52,6 +55,23 @@
             "sync"
         ],
 
+        "cdnEndpoints": [
+            {
+                "name": "[concat('esw-', parameters('stage'), '-invocing-cdn')]",
+                "originHost": "[replace(replace(reference(variables('storageAccountName')).primaryEndpoints.blob,'https://',''),'/','')]",
+                "originPath": "/invocing/test",
+                "domainName": "esw-kros-wtf",
+                "domainHost": "esw.kros.wtf"
+            },
+            {
+                "name": "[concat('esw-', parameters('stage'), '-invocing-development-cdn')]",
+                "originHost": "[replace(replace(reference(variables('storageAccountName')).primaryEndpoints.blob,'https://',''),'/','')]",
+                "originPath": "/invocing/dev",
+                "domainName": "dev-esw-kros-wtf",
+                "domainHost": "dev.esw.kros.wtf"
+            }
+        ],
+
         "apiSlotName": "development",
         "sqlServerAdminUserName": "krosdbadmin",
         "sqlServerAdminPassword": "ZQpdeE_vY_gZsZ=c5Hr$4F@gcv"
@@ -77,17 +97,17 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]",
+            "name": "[variables('cdnProfileName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('functionAppUri')]",
+                    "uri": "[variables('cdnUri')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "functionAppName": { "value": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]" },
-                    "storageName": { "value": "[variables('storageAccountName')]" },
-                    "storageKey": { "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')),'2019-04-01').keys[0].value]" }
+                    "cdnProfileName": { "value": "[variables('cdnProfileName')]" },
+                    "stage": { "value": "[parameters('stage')]" },
+                    "endpoints": { "value": "" }
                 }
             },
             "copy": {
