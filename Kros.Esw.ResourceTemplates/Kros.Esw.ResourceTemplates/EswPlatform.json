@@ -4,6 +4,9 @@
     "parameters": {
         "stage": {
             "type": "string"
+        },
+        "slot": {
+            "type": "string"
         }
     },
     "variables": {
@@ -70,7 +73,7 @@
             }
         ],
 
-        "apiSlotName": "development",
+        "apiSlotName": "[parameters('slot')]",
         "sqlServerAdminUserName": "krosdbadmin",
         "sqlServerAdminPassword": "ZQpdeE_vY_gZsZ=c5Hr$4F@gcv"
 
