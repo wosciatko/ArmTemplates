@@ -122,6 +122,7 @@
     ],
     "outputs": {
         "keyyy": {
+            "type" :  "string",
             "value": "[reference(variables('storageAccountName')).outputs.storageKey.value]"
         }
     }
