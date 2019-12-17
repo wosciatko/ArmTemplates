@@ -60,13 +60,13 @@
                 "name": "[concat('esw-', parameters('stage'), '-invocing-cdn')]",
                 "originPath": "/invocing/test",
                 "domainName": "esw-kros-wtf",
-                "domainHost": "esw.kros.wtf"
+                "domainHost": ""
             },
             {
                 "name": "[concat('esw-', parameters('stage'), '-invocing-development-cdn')]",
                 "originPath": "/invocing/dev",
                 "domainName": "dev-esw-kros-wtf",
-                "domainHost": "dev.esw.kros.wtf"
+                "domainHost": ""
             }
         ],
 
