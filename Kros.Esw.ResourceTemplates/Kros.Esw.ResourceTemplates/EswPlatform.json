@@ -218,7 +218,7 @@
                 "parameters": {
                     "functionAppName": { "value": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]" },
                     "storageName": { "value": "[variables('storageAccountName')]" },
-                    "storageKey": { "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')),'2019-04-01').keys[0].value]" }
+                    "storageKey": { "value": "[listKeys(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')),'2019-04-01').keys[0].value]" }
                 }
             },
             "copy": {
