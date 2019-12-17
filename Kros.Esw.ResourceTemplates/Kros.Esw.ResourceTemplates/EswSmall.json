@@ -60,13 +60,13 @@
                 "name": "[concat('esw-', parameters('stage'), '-invocing-cdn')]",
                 "originPath": "/invocing/test",
                 "domainName": "esw-kros-wtf",
-                "domainHost": "esw.kros.wtf"
+                "domainHost": ""
             },
             {
                 "name": "[concat('esw-', parameters('stage'), '-invocing-development-cdn')]",
                 "originPath": "/invocing/dev",
                 "domainName": "dev-esw-kros-wtf",
-                "domainHost": "dev.esw.kros.wtf"
+                "domainHost": ""
             }
         ],
 
@@ -106,7 +106,7 @@
                     "cdnProfileName": { "value": "[variables('cdnProfileName')]" },
                     "stage": { "value": "[parameters('stage')]" },
                     "endpoints": { "value": "[variables('cdnEndpoints')]" },
-                    "storageUri": { "value": "" }
+                    "storageUri": { "value": "[replace(replace(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), '2019-04-01').primaryEndpoints.web,'https://',''),'/','')]" }
 
                 }
             },
@@ -115,10 +115,5 @@
             ]
         }
     ],
-    "outputs": {
-        "BlobUri": {
-            "value": "[reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), '2016-01-01').primaryEndpoints.blob]",
-            "type": "string"
-        }
-    }
+    "outputs": {}
 }

@@ -61,6 +61,7 @@
             "type": "Microsoft.Cdn/profiles/endpoints/customdomains",
             "apiVersion": "2016-04-02",
             "name": "[concat(parameters('cdnProfileName'), '/', parameters('endpoints')[copyIndex()].name, '/', parameters('endpoints')[copyIndex()].domainName)]",
+            "condition": "[not(empty(parameters('endpoints')[copyIndex()].domainHost))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Cdn/profiles/endpoints', parameters('cdnProfileName'), parameters('endpoints')[copyIndex()].name)]",
                 "[resourceId('Microsoft.Cdn/profiles', parameters('cdnProfileName'))]"
