@@ -106,18 +106,19 @@
                     "cdnProfileName": { "value": "[variables('cdnProfileName')]" },
                     "stage": { "value": "[parameters('stage')]" },
                     "endpoints": { "value": "[variables('cdnEndpoints')]" },
-                    "storageUri": { "value": "[replace(replace(reference(variables('storageAccountName')).primaryEndpoints.blob,'https://',''),'/','')]" }
+                    "storageUri": { "value": "" }
 
                 }
-            },
-            "copy": {
-                "name": "functionAppCopy",
-                "count": "[length(variables('functionAppToCreate'))]"
             },
             "dependsOn": [
                 "[variables('storageAccountName')]"
             ]
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "BlobUri": {
+            "value": "[reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), '2016-01-01').primaryEndpoints.blob]",
+            "type": "string"
+        }
+    }
 }
