@@ -116,7 +116,7 @@
             },
             "copy": {
                 "name": "serviceApiCopy",
-                "count": "[length(variables('servicesToCreate'))]",
+                "count": "[length(variables('servicesToCreate'))]"
             },
             "dependsOn": [
                 "[variables('servicePlanName')]",
@@ -139,12 +139,6 @@
                     "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" },
                     "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" }
                 }
-            },
-            "copy": {
-                "name": "serviceApiCopy",
-                "count": "[length(variables('servicesToCreate'))]",
-                "mode": "serial",
-                "batchsize": 1
             },
             "dependsOn": [
                 "[variables('servicePlanName')]",
@@ -250,7 +244,8 @@
                 "parameters": {
                     "functionAppName": { "value": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]" },
                     "storageName": { "value": "[variables('storageAccountName')]" },
-                    "storageKey": { "value": "[reference(variables('storageAccountName')).outputs.storageKey.value]" }
+                    "storageKey": { "value": "[reference(variables('storageAccountName')).outputs.storageKey.value]" },
+                    "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" }
                 }
             },
             "copy": {
@@ -260,7 +255,8 @@
                 "batchsize": 1
             },
             "dependsOn": [
-                "[variables('storageAccountName')]"
+                "[variables('storageAccountName')]",
+                "[variables('appInsightsName')]"
             ]
         },
         {
