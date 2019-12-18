@@ -67,7 +67,7 @@
             "type": "Microsoft.Web/sites/siteextensions",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/Sites', parameters('apiName'))]"
-            ],
+            ]
         }
     ]
 }
