@@ -134,7 +134,7 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "apiName": { "value": "" },
+                    "apiName": { "value": "[variables('monitoringWebName')]" },
                     "slotName": { "value": "[variables('apiSlotName')]" },
                     "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" },
                     "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" }
