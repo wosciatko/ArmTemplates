@@ -21,7 +21,7 @@
         "funcServicePlanUri": "[concat(variables('baseTemplateUri'), 'FuncServicePlan.json') ]",
         "functionAppUri": "[concat(variables('baseTemplateUri'), 'FunctionApp.json') ]",
         "cdnUri": "[concat(variables('baseTemplateUri'), 'Cdn.json') ]",
-
+        "appInsightsUri": "[concat(variables('baseTemplateUri'), 'ApplicationInsights.json') ]",
 
 
         "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]",
@@ -30,6 +30,7 @@
         "storageAccountName": "[concat('esw', parameters('stage'), 'storage')]",
         "azureServiceBusName": "[concat('esw-', parameters('stage'), '-platform-asb')]",
         "cdnProfileName": "[concat('esw-', parameters('stage'), '-cdnprofile')]",
+        "appInsightsName": "[concat('esw-', parameters('stage'), '-ain')]",
 
 
 
@@ -225,7 +226,7 @@
                 "name": "functionAppCopy",
                 "count": "[length(variables('functionAppToCreate'))]",
                 "mode": "serial",
-                "batchsize" :  1
+                "batchsize": 1
             },
             "dependsOn": [
                 "[variables('storageAccountName')]"
@@ -247,6 +248,24 @@
                     "endpoints": { "value": "[variables('cdnEndpoints')]" },
                     "storageUri": { "value": "[reference(variables('storageAccountName')).outputs.storageWebHost.value]" }
 
+                }
+            },
+            "dependsOn": [
+                "[variables('storageAccountName')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[variables('appInsightsName')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('appInsightsUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "ainName": { "value": "[variables('appInsightsName')]" }
                 }
             },
             "dependsOn": [
