@@ -52,7 +52,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('apiName'))]",
-                [ "concat(parameters('apiName')", "'/ainext')" ]
+                "[concat(parameters('apiName'), '/ainext')]"
             ],
             "tags": {
                 "Esw": ""
