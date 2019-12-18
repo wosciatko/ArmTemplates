@@ -29,20 +29,6 @@
             "properties": {
                 "serverFarmId": "[parameters('servicePlanId')]",
                 "httpsOnly": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/slots",
-            "apiVersion": "2018-11-01",
-            "condition": "[greater(length(parameters('slotName')), 0)]",
-            "name": "[concat(parameters('apiName'), '/', parameters('slotName'))]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('apiName'))]"
-            ],
-            "kind": "app",
-            "properties": {
-                "serverFarmId": "[parameters('servicePlanId')]"
             },
             "resources": [
                 {
@@ -57,6 +43,20 @@
                     }
                 }
             ]
+        },
+        {
+            "type": "Microsoft.Web/sites/slots",
+            "apiVersion": "2018-11-01",
+            "condition": "[greater(length(parameters('slotName')), 0)]",
+            "name": "[concat(parameters('apiName'), '/', parameters('slotName'))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('apiName'))]"
+            ],
+            "kind": "app",
+            "properties": {
+                "serverFarmId": "[parameters('servicePlanId')]"
+            }
         }
     ]
 }
