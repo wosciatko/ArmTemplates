@@ -96,7 +96,32 @@
                 }
             }
         },
-
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('serviceApiUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "apiName": { "value": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]" },
+                    "slotName": { "value": "[variables('apiSlotName')]" },
+                    "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" },
+                    "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" }
+                }
+            },
+            "copy": {
+                "name": "serviceApiCopy",
+                "count": "[length(variables('servicesToCreate'))]"
+            },
+            "dependsOn": [
+                "[variables('servicePlanName')]",
+                "[variables('appInsightsName')]"
+            ]
+        },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
@@ -247,10 +272,5 @@
             }
         }
     ],
-    "outputs": {
-        "test": {
-            "type": "string",
-            "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]"
-        }
-    }
+    "outputs": {}
 }
