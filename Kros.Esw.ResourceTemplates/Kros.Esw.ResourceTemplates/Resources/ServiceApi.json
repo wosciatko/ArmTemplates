@@ -10,6 +10,9 @@
         },
         "servicePlanId": {
             "type": "string"
+        },
+        "appInsightsInstrumentationKey": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -26,7 +29,31 @@
             "properties": {
                 "serverFarmId": "[parameters('servicePlanId')]",
                 "httpsOnly": true
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-08-01",
+                    "name": "appsettings",
+                    "type": "config",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('apiName'))]",
+                        "Microsoft.ApplicationInsights.AzureWebSites"
+                    ],
+                    "properties": {
+                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]"
+                    }
+                },
+                {
+                    "apiVersion": "2015-08-01",
+                    "name": "Microsoft.ApplicationInsights.AzureWebSites",
+                    "type": "siteextensions",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('apiName'))]"
+                    ],
+                    "properties": {
+                    }
+                }
+            ]
         },
         {
             "type": "Microsoft.Web/sites/slots",

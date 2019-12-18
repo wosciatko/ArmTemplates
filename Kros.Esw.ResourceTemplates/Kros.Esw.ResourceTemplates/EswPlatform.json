@@ -109,7 +109,8 @@
                 "parameters": {
                     "apiName": { "value": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]" },
                     "slotName": { "value": "[variables('apiSlotName')]" },
-                    "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" }
+                    "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" },
+                    "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" }
                 }
             },
             "copy": {
@@ -117,7 +118,8 @@
                 "count": "[length(variables('servicesToCreate'))]"
             },
             "dependsOn": [
-                "[variables('servicePlanName')]"
+                "[variables('servicePlanName')]",
+                "[variables('appInsightsName')]"
             ]
         },
         {
@@ -267,10 +269,7 @@
                 "parameters": {
                     "ainName": { "value": "[variables('appInsightsName')]" }
                 }
-            },
-            "dependsOn": [
-                "[variables('storageAccountName')]"
-            ]
+            }
         }
     ],
     "outputs": {}

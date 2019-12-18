@@ -3,7 +3,6 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "ainName": {
-            "defaultValue": "kros-dev-shared-ain",
             "type": "string"
         }
     },
@@ -22,5 +21,11 @@
                 "Application_Type": "web"
             }
         }
-    ]
+    ],
+    "outputs": {
+        "instrumentationKey": {
+            "type": "string",
+            "value": "[reference(concat('microsoft.insights/components/', parameters('ainName'))).InstrumentationKey]"
+        }
+    }
 }
