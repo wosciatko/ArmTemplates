@@ -29,31 +29,7 @@
             "properties": {
                 "serverFarmId": "[parameters('servicePlanId')]",
                 "httpsOnly": true
-            },
-            "resources": [
-                {
-                    "apiVersion": "2018-11-01",
-                    "name": "[concat(parameters('apiName'), '/appsettings')]",
-                    "type": "Microsoft.Web/sites/config",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Web/Sites', parameters('apiName'))]",
-                        "[concat(parameters('apiName'), '/ainextension')]"
-                    ],
-                    "properties": {
-                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]"
-                    }
-                },
-                {
-                    "apiVersion": "2015-08-01",
-                    "name": "[concat(parameters('apiName'), '/ainextension')]",
-                    "type": "Microsoft.Web/sites/siteextensions",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Web/Sites', parameters('apiName'))]"
-                    ],
-                    "properties": {
-                    }
-                }
-            ]
+            }
         },
         {
             "type": "Microsoft.Web/sites/slots",
@@ -67,6 +43,28 @@
             "kind": "app",
             "properties": {
                 "serverFarmId": "[parameters('servicePlanId')]"
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('apiName'), '/appsettings')]",
+            "type": "Microsoft.Web/sites/config",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/Sites', parameters('apiName'))]",
+                "[concat(parameters('apiName'), '/ainextension')]"
+            ],
+            "properties": {
+                "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]"
+            }
+        },
+        {
+            "apiVersion": "2015-08-01",
+            "name": "[concat(parameters('apiName'), '/ainextension')]",
+            "type": "Microsoft.Web/sites/siteextensions",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/Sites', parameters('apiName'))]"
+            ],
+            "properties": {
             }
         }
     ]
