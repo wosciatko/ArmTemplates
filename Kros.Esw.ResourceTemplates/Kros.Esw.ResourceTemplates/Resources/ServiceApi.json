@@ -36,7 +36,8 @@
                     "name": "appsettings",
                     "type": "config",
                     "dependsOn": [
-                        "[parameters('apiName')]"
+                        "[parameters('apiName')]",
+                        "Microsoft.ApplicationInsights.AzureWebSites"
                     ],
                     "properties": {
                         "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]"
