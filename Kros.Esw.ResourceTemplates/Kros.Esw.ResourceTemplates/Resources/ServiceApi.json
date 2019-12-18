@@ -52,7 +52,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', parameters('apiName'))]",
-                "[concat(parameters('apiName'), '/ainext')]"
+                "[resourceId('Microsoft.Web/sites/siteextensions', concat(parameters('apiName'), '/ainext'))]"
             ],
             "tags": {
                 "Esw": ""
@@ -60,7 +60,14 @@
             "properties": {
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]"
             }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('apiName'), '/ainext')]",
+            "type": "Microsoft.Web/sites/siteextensions",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/Sites', parameters('apiName'))]"
+            ]
         }
-
     ]
 }
