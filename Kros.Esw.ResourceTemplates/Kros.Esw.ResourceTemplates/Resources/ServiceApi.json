@@ -12,7 +12,7 @@
             "type": "string"
         },
         "appInsightsInstrumentationKey": {
-            "type": "string"
+            "type": "securestring"
         }
     },
     "variables": {},
