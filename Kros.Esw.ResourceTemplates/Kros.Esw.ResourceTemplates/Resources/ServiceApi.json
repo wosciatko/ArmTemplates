@@ -46,25 +46,18 @@
             }
         },
         {
+            "type": "Microsoft.Web/sites/config",
             "apiVersion": "2018-11-01",
             "name": "[concat(parameters('apiName'), '/web')]",
-            "type": "Microsoft.Web/sites/config",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/Sites', parameters('apiName'))]",
-                "[concat(parameters('apiName'), '/ainextension')]"
+                "[resourceId('Microsoft.Web/sites', parameters('apiName'))]"
             ],
+            "tags": {
+                "Esw": ""
+            },
             "properties": {
-                "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]"
-            }
-        },
-        {
-            "apiVersion": "2015-08-01",
-            "name": "[concat(parameters('apiName'), '/ainextension')]",
-            "type": "Microsoft.Web/sites/siteextensions",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/Sites', parameters('apiName'))]"
-            ],
-            "properties": {
+                "http20Enabled": false
             }
         }
     ]
