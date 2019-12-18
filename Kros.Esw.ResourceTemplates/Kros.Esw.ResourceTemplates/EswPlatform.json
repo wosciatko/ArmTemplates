@@ -115,7 +115,9 @@
             },
             "copy": {
                 "name": "serviceApiCopy",
-                "count": "[length(variables('servicesToCreate'))]"
+                "count": "[length(variables('servicesToCreate'))]",
+                "mode": "serial",
+                "batchsize": 1
             },
             "dependsOn": [
                 "[variables('servicePlanName')]",
