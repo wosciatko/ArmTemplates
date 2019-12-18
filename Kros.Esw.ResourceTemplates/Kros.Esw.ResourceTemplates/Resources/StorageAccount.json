@@ -57,6 +57,10 @@
         "storageKey": {
             "type": "string",
             "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageName')), '2019-04-01').keys[0].value]"
+        },
+        "storageWebHost": {
+            "type": "string",
+            "value": "[replace(replace(reference(concat('Microsoft.Storage/storageAccounts/', parameters('storageName')), '2019-04-01').primaryEndpoints.web,'https://',''),'/','')]"
         }
     }
 
