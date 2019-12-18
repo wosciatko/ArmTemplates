@@ -10,6 +10,9 @@
         },
         "storageKey": {
             "type": "string"
+        },
+        "appInsightsInstrumentationKey": {
+            "type": "securestring"
         }
     },
     "variables": {
@@ -47,6 +50,10 @@
                         {
                             "name": "FUNCTIONS_EXTENSION_VERSION",
                             "value": "~2"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[parameters('appInsightsInstrumentationKey')]"
                         }
                     ]
                 }

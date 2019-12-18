@@ -31,6 +31,7 @@
         "azureServiceBusName": "[concat('esw-', parameters('stage'), '-platform-asb')]",
         "cdnProfileName": "[concat('esw-', parameters('stage'), '-cdnprofile')]",
         "appInsightsName": "[concat('esw-', parameters('stage'), '-ain')]",
+        "monitoringWebName": "[concat('esw-', parameters('stage'), '-monitoring-web')]",
 
 
 
@@ -108,6 +109,32 @@
                 },
                 "parameters": {
                     "apiName": { "value": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]" },
+                    "slotName": { "value": "[variables('apiSlotName')]" },
+                    "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" },
+                    "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" }
+                }
+            },
+            "copy": {
+                "name": "serviceApiCopy",
+                "count": "[length(variables('servicesToCreate'))]",
+            },
+            "dependsOn": [
+                "[variables('servicePlanName')]",
+                "[variables('appInsightsName')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-11-01",
+            "name": "[variables('monitoringWebName')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('serviceApiUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "apiName": { "value": "" },
                     "slotName": { "value": "[variables('apiSlotName')]" },
                     "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" },
                     "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" }
