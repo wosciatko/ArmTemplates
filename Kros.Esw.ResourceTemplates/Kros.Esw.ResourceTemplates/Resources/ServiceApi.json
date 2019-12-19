@@ -80,9 +80,6 @@
                     "apiVersion": "2015-08-01",
                     "name": "appsettings",
                     "type": "config",
-                    "dependsOn": [
-                        "[concat(parameters('apiName'), '/', parameters('slotName'))]"
-                    ],
                     "properties": {
                         "ASPNETCORE_ENVIRONMENT": "[parameters('aspnetEnvironment')]"
                     }

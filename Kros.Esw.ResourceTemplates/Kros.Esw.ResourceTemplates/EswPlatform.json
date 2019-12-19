@@ -13,6 +13,12 @@
         },
         "sqlAdminPassword": {
             "type": "securestring"
+        },
+        "aspnetEnvironment": {
+            "type": "string"
+        },
+        "slotAspnetEnvironment": {
+            "type": "string"
         }
     },
     "variables": {
@@ -112,7 +118,9 @@
                     "apiName": { "value": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]" },
                     "slotName": { "value": "[variables('apiSlotName')]" },
                     "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" },
-                    "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" }
+                    "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" },
+                    "aspnetEnvironment": { "value": "[parameters('aspnetEnvironment')]" },
+                    "slotAspnetEnvironment": { "value": "[parameters('slotAspnetEnvironment')]" }
                 }
             },
             "copy": {
@@ -138,8 +146,11 @@
                     "apiName": { "value": "[variables('monitoringWebName')]" },
                     "slotName": { "value": "[variables('apiSlotName')]" },
                     "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" },
-                    "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" }
+                    "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" },
+                    "aspnetEnvironment": {  "value": "[parameters('aspnetEnvironment')]" },
+                    "slotAspnetEnvironment": { "value": "[parameters('slotAspnetEnvironment')]" }
                 }
+
             },
             "dependsOn": [
                 "[variables('servicePlanName')]",
