@@ -7,6 +7,12 @@
         },
         "slot": {
             "type": "string"
+        },
+        "sqlAdminName": {
+            "type": "string"
+        },
+        "sqlAdminPassword": {
+            "type": "securestring"
         }
     },
     "variables": {
@@ -28,7 +34,7 @@
         "sqlServerName": "[concat('esw-', parameters('stage'), '-sql')]",
         "azureSearchName": "[concat('esw-', parameters('stage'), '-search')]",
         "storageAccountName": "[concat('esw', parameters('stage'), 'storage')]",
-        "azureServiceBusName": "[concat('esw-', parameters('stage'), '-platform-asb')]",
+        "azureServiceBusName": "[concat('esw-', parameters('stage'), '-asb')]",
         "cdnProfileName": "[concat('esw-', parameters('stage'), '-cdnprofile')]",
         "appInsightsName": "[concat('esw-', parameters('stage'), '-ain')]",
         "monitoringWebName": "[concat('esw-', parameters('stage'), '-monitoring-web')]",
@@ -62,13 +68,13 @@
 
         "cdnEndpoints": [
             {
-                "name": "[concat('esw-', parameters('stage'), '-invocing-cdn')]",
+                "name": "[concat('esw-', parameters('stage'), '-cdn')]",
                 "originPath": "/invocing/test",
                 "domainName": "esw-kros-wtf",
                 "domainHost": ""
             },
             {
-                "name": "[concat('esw-', parameters('stage'), '-invocing-development-cdn')]",
+                "name": "[concat('esw-', parameters('stage'), '-', parameters('slot'), '-cdn')]",
                 "originPath": "/invocing/dev",
                 "domainName": "dev-esw-kros-wtf",
                 "domainHost": ""
