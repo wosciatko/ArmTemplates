@@ -24,7 +24,6 @@
         "azureSearchUri": "[concat(variables('baseTemplateUri'), 'AzureSearch.json')]",
         "storageAccountUri": "[concat(variables('baseTemplateUri'), 'StorageAccount.json')]",
         "serviceBusUri": "[concat(variables('baseTemplateUri'), 'ServiceBus.json')]",
-        "funcServicePlanUri": "[concat(variables('baseTemplateUri'), 'FuncServicePlan.json') ]",
         "functionAppUri": "[concat(variables('baseTemplateUri'), 'FunctionApp.json') ]",
         "cdnUri": "[concat(variables('baseTemplateUri'), 'Cdn.json') ]",
         "appInsightsUri": "[concat(variables('baseTemplateUri'), 'ApplicationInsights.json') ]",
@@ -81,11 +80,7 @@
             }
         ],
 
-        "apiSlotName": "[parameters('slot')]",
-        "sqlServerAdminUserName": "krosdbadmin",
-        "sqlServerAdminPassword": "ZQpdeE_vY_gZsZ=c5Hr$4F@gcv"
-
-
+        "apiSlotName": "[parameters('slot')]"
     },
     "resources": [
         {
@@ -163,8 +158,8 @@
                 },
                 "parameters": {
                     "serverName": { "value": "[variables('sqlServerName')]" },
-                    "administratorLogin": { "value": "[variables('sqlServerAdminUserName')]" },
-                    "administratorLoginPassword": { "value": "[variables('sqlServerAdminPassword')]" }
+                    "administratorLogin": { "value": "[parameters('sqlAdminName')]" },
+                    "administratorLoginPassword": { "value": "[parameters('sqlAdminPassword')]" }
                 }
             }
         },

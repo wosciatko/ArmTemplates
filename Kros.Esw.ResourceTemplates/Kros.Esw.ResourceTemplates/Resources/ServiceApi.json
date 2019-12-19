@@ -11,6 +11,12 @@
         "servicePlanId": {
             "type": "string"
         },
+        "aspnetEnvironment": {
+            "type": "string"
+        },
+        "slotAspnetEnvironment": {
+            "type": "string"
+        },
         "appInsightsInstrumentationKey": {
             "type": "securestring"
         }
@@ -40,7 +46,8 @@
                         "Microsoft.ApplicationInsights.AzureWebSites"
                     ],
                     "properties": {
-                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]"
+                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
+                        "ASPNETCORE_ENVIRONMENT": "[parameters('aspnetEnvironment')]"
                     }
                 },
                 {
@@ -67,7 +74,20 @@
             "kind": "app",
             "properties": {
                 "serverFarmId": "[parameters('servicePlanId')]"
-            }
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-08-01",
+                    "name": "appsettings",
+                    "type": "config",
+                    "dependsOn": [
+                        "[concat(parameters('apiName'), '/', parameters('slotName'))]"
+                    ],
+                    "properties": {
+                        "ASPNETCORE_ENVIRONMENT": "[parameters('aspnetEnvironment')]"
+                    }
+                }
+            ]
         }
     ]
 }
