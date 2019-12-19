@@ -84,7 +84,8 @@
                         "[resourceId('Microsoft.Web/sites/slots', parameters('apiName'), parameters('slotName'))]"
                     ],
                     "properties": {
-                        "ASPNETCORE_ENVIRONMENT": "[parameters('aspnetEnvironment')]"
+                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
+                        "ASPNETCORE_ENVIRONMENT": "[parameters('slotAspnetEnvironment')]"
                     }
                 }
             ]
