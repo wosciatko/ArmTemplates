@@ -20,11 +20,7 @@
                 "Esw": ""
             },
             "sku": {
-                "name": "P2v2",
-                "tier": "PremiumV2",
-                "size": "P2v2",
-                "family": "Pv2",
-                "capacity": 1
+                "name": "P3v2"
             },
             "kind": "app",
             "properties": {
