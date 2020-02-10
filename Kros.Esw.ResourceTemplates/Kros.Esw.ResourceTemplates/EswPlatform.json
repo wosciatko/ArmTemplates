@@ -35,9 +35,7 @@
                 "I1",
                 "I2",
                 "I3"
-
-            ],
-            "defaultValue": "P2v2"
+            ]
         }
     },
     "variables": {

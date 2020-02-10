@@ -7,6 +7,35 @@
         },
         "slot": {
             "type": "string"
+        },
+        "sqlAdminName": {
+            "type": "string"
+        },
+        "sqlAdminPassword": {
+            "type": "securestring"
+        },
+        "aspnetEnvironment": {
+            "type": "string"
+        },
+        "slotAspnetEnvironment": {
+            "type": "string"
+        },
+        "servicePlanSku": {
+            "type": "string",
+            "allowedValues": [
+                "S1",
+                "S2",
+                "S3",
+                "P1v2",
+                "P2v2",
+                "P3v2",
+                "PC2",
+                "PC3",
+                "PC4",
+                "I1",
+                "I2",
+                "I3"
+            ]
         }
     },
     "variables": {
@@ -18,21 +47,19 @@
         "azureSearchUri": "[concat(variables('baseTemplateUri'), 'AzureSearch.json')]",
         "storageAccountUri": "[concat(variables('baseTemplateUri'), 'StorageAccount.json')]",
         "serviceBusUri": "[concat(variables('baseTemplateUri'), 'ServiceBus.json')]",
-        "funcServicePlanUri": "[concat(variables('baseTemplateUri'), 'FuncServicePlan.json') ]",
         "functionAppUri": "[concat(variables('baseTemplateUri'), 'FunctionApp.json') ]",
         "cdnUri": "[concat(variables('baseTemplateUri'), 'Cdn.json') ]",
-
+        "appInsightsUri": "[concat(variables('baseTemplateUri'), 'ApplicationInsights.json') ]",
 
 
         "servicePlanName": "[concat('esw-', parameters('stage'), '-asp')]",
         "sqlServerName": "[concat('esw-', parameters('stage'), '-sql')]",
         "azureSearchName": "[concat('esw-', parameters('stage'), '-search')]",
         "storageAccountName": "[concat('esw', parameters('stage'), 'storage')]",
-        "azureServiceBusName": "[concat('esw-', parameters('stage'), '-platform-asb')]",
+        "azureServiceBusName": "[concat('esw-', parameters('stage'), '-asb')]",
         "cdnProfileName": "[concat('esw-', parameters('stage'), '-cdnprofile')]",
-
-
-
+        "appInsightsName": "[concat('esw-', parameters('stage'), '-ain')]",
+        "monitoringWebName": "[concat('esw-', parameters('stage'), '-monitoring-web')]",
 
         "servicesToCreate": [
             "authorization",
@@ -60,70 +87,66 @@
 
         "cdnEndpoints": [
             {
-                "name": "[concat('esw-', parameters('stage'), '-invocing-cdn')]",
-                "originPath": "/invocing/test",
-                "domainName": "esw-kros-wtf",
-                "domainHost": ""
+                "name": "[concat('esw-', parameters('stage'),'-temp-cdn')]",
+                "originPath": "/invocing/production",
+                "domainName": "fakturacia-kros-wtf",
+                "domainHost": "fakturacia.kros.wtf"
             },
             {
-                "name": "[concat('esw-', parameters('stage'), '-invocing-development-cdn')]",
-                "originPath": "/invocing/dev",
-                "domainName": "dev-esw-kros-wtf",
-                "domainHost": ""
+                "name": "[concat('esw-', parameters('stage'), '-', parameters('slot'), '-cdn')]",
+                "originPath": "/invocing/staging",
+                "domainName": "staging-fakturacia-kros-wtf",
+                "domainHost": "staging.fakturacia.kros.wtf"
             }
         ],
 
-        "apiSlotName": "[parameters('slot')]",
-        "sqlServerAdminUserName": "krosdbadmin",
-        "sqlServerAdminPassword": "ZQpdeE_vY_gZsZ=c5Hr$4F@gcv"
-
-
+        "apiSlotName": "[parameters('slot')]"
     },
     "resources": [
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[variables('storageAccountName')]",
+            "name": "[variables('servicePlanName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('storageAccountUri')]",
+                    "uri": "[variables('servicePlanUri')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "storageName": { "value": "[variables('storageAccountName')]" }
+                    "servicePlanName": { "value": "[variables('servicePlanName')]" },
+                    "servicePlanSku": { "value": "[parameters('servicePlanSku')]" }
                 }
             }
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-11-01",
-            "name": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]",
+            "name": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('functionAppUri')]",
+                    "uri": "[variables('serviceApiUri')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "functionAppName": { "value": "[concat('esw-', parameters('stage'), '-', variables('functionAppToCreate')[copyIndex()], '-azfun')]" },
-                    "storageName": { "value": "[variables('storageAccountName')]" },
-                    "storageKey": { "value": "[reference(variables('storageAccountName')).outputs.storageKey.value]" }
+                    "apiName": { "value": "[concat('esw-', parameters('stage'), '-', variables('servicesToCreate')[copyIndex()], '-api')]" },
+                    "slotName": { "value": "[variables('apiSlotName')]" },
+                    "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" },
+                    "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" },
+                    "aspnetEnvironment": { "value": "[parameters('aspnetEnvironment')]" },
+                    "slotAspnetEnvironment": { "value": "[parameters('slotAspnetEnvironment')]" }
                 }
             },
             "copy": {
-                "name": "functionAppCopy",
-                "count": "[length(variables('functionAppToCreate'))]"
+                "name": "serviceApiCopy",
+                "count": "[length(variables('servicesToCreate'))]"
             },
             "dependsOn": [
-                "[variables('storageAccountName')]"
+                "[variables('servicePlanName')]",
+                "[variables('appInsightsName')]"
             ]
         }
     ],
-    "outputs": {
-        "keyyy": {
-            "type" :  "string",
-            "value": "[reference(variables('storageAccountName')).outputs.storageKey.value]"
-        }
-    }
+    "outputs": {}
 }

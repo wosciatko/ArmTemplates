@@ -72,9 +72,9 @@
             ]
         },
         {
+            "condition": "[greater(length(parameters('slotName')), 0)]",
             "type": "Microsoft.Web/sites/slots",
             "apiVersion": "2018-11-01",
-            "condition": "[greater(length(parameters('slotName')), 0)]",
             "name": "[concat(parameters('apiName'), '/', parameters('slotName'))]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
