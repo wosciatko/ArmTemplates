@@ -30,14 +30,14 @@
     <None Include="Resources\Cdn.json" />
     <None Include="Resources\FunctionApp.json" />
     <None Include="Resources\AzureSearch.json" />
-    <None Include="Resources\ServiceApi_stupid.json" />
+    <None Include="Resources\ServiceApi.json" />
     <None Include="Resources\ServiceBus.json" />
     <None Include="Resources\ServicePlan.json" />
     <None Include="Deployment.targets">
       <Visible>False</Visible>
     </None>
     <Content Include="Deploy-AzureResourceGroup.ps1" />
-    <None Include="Resources\ServiceApi.json" />
+    <None Include="Resources\ServiceApiSlot.json" />
     <None Include="Resources\SqlDatabase.json" />
     <None Include="Resources\SqlServer.json" />
     <None Include="Resources\StorageAccount.json" />
