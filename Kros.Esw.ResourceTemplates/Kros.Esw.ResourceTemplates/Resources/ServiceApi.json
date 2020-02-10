@@ -42,7 +42,7 @@
                             "value": "dotnetcore"
                         }
                     ],
-                    "alwaysOn" :  true
+                    "alwaysOn": true
                 }
             },
             "resources": [

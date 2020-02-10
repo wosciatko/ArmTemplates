@@ -19,6 +19,25 @@
         },
         "slotAspnetEnvironment": {
             "type": "string"
+        },
+        "servicePlanSku": {
+            "type": "string",
+            "allowedValues": [
+                "S1",
+                "S2",
+                "S3",
+                "P1v2",
+                "P2v2",
+                "P3v2",
+                "PC2",
+                "PC3",
+                "PC4",
+                "I1",
+                "I2",
+                "I3"
+
+            ],
+            "defaultValue": "P2v2"
         }
     },
     "variables": {
@@ -43,9 +62,6 @@
         "cdnProfileName": "[concat('esw-', parameters('stage'), '-cdnprofile')]",
         "appInsightsName": "[concat('esw-', parameters('stage'), '-ain')]",
         "monitoringWebName": "[concat('esw-', parameters('stage'), '-monitoring-web')]",
-
-
-
 
         "servicesToCreate": [
             "authorization",
@@ -73,16 +89,16 @@
 
         "cdnEndpoints": [
             {
-                "name": "[concat('esw-', parameters('stage'), '-cdn')]",
-                "originPath": "/invocing/test",
-                "domainName": "esw-kros-wtf",
-                "domainHost": ""
+                "name": "[concat('esw-', parameters('stage'),'-temp-cdn')]",
+                "originPath": "/invocing/production",
+                "domainName": "fakturacia-kros-wtf",
+                "domainHost": "fakturacia.kros.wtf"
             },
             {
                 "name": "[concat('esw-', parameters('stage'), '-', parameters('slot'), '-cdn')]",
-                "originPath": "/invocing/dev",
-                "domainName": "dev-esw-kros-wtf",
-                "domainHost": ""
+                "originPath": "/invocing/staging",
+                "domainName": "staging-fakturacia-kros-wtf",
+                "domainHost": "staging.fakturacia.kros.wtf"
             }
         ],
 
@@ -100,7 +116,8 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "servicePlanName": { "value": "[variables('servicePlanName')]" }
+                    "servicePlanName": { "value": "[variables('servicePlanName')]" },
+                    "servicePlanSku": { "value": "[parameters('servicePlanSku')]" }
                 }
             }
         },
@@ -147,7 +164,7 @@
                     "slotName": { "value": "[variables('apiSlotName')]" },
                     "servicePlanId": { "value": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]" },
                     "appInsightsInstrumentationKey": { "value": "[reference(variables('appInsightsName')).outputs.instrumentationKey.value]" },
-                    "aspnetEnvironment": {  "value": "[parameters('aspnetEnvironment')]" },
+                    "aspnetEnvironment": { "value": "[parameters('aspnetEnvironment')]" },
                     "slotAspnetEnvironment": { "value": "[parameters('slotAspnetEnvironment')]" }
                 }
 
